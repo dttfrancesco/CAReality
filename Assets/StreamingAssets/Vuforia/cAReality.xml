@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+  <Tracking>
+    <ImageTarget name="shieldTarget" size="1.000000 1.414427" />
+    <ImageTarget name="powerUpTarget" size="1.000000 1.414427" />
+    <ImageTarget name="stopTarget" size="1.000000 1.414427" />
+    <ImageTarget name="quizTarget" size="1.000000 1.414427" />
+    <ImageTarget name="steeringWheel" size="1.000000 1.414427" />
+  </Tracking>
+</QCARConfig>
