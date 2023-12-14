@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     {
         Running,
         Paused,
-        GameOver
+        GameOver,
     }
 
     public GameState CurrentState { get; private set; } // Current state of the game
