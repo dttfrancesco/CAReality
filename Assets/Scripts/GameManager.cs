@@ -60,6 +60,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GoRunning()
+    {
+        CurrentState = GameState.Running;
+    }
+
     public void GameOver()
     {
         // Set the game state to GameOver

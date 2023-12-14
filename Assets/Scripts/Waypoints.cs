@@ -14,7 +14,7 @@ public class Waypoints : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.CurrentState == GameManager.GameState.Paused)
+        if (GameManager.Instance.CurrentState != GameManager.GameState.Running)
         {
             return; // Do nothing if the game is paused
         }
