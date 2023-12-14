@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     {
         Running,
         Paused,
-        GameOver
+        GameOver,
     }
 
     public GameState CurrentState { get; private set; } // Current state of the game
@@ -58,6 +58,11 @@ public class GameManager : MonoBehaviour
             CurrentState = GameState.Running;
             // Add additional logic for when the game resumes
         }
+    }
+
+    public void GoRunning()
+    {
+        CurrentState = GameState.Running;
     }
 
     public void GameOver()
