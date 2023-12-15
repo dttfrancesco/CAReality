@@ -10,11 +10,14 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        collidedObject = other.gameObject; // Store the object that triggered the power-up
-        powerUpEffect.Apply(collidedObject);
-        gameObject.SetActive(false);
+        if (!other.gameObject.CompareTag("track"))
+        {
+            collidedObject = other.gameObject; // Store the object that triggered the power-up
+            powerUpEffect.Apply(collidedObject);
+            gameObject.SetActive(false);
 
-        StartCoroutine(DelayedRemovalEffect());
+            StartCoroutine(DelayedRemovalEffect());
+        }
     }
 
     IEnumerator DelayedRemovalEffect()
