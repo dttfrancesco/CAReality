@@ -7,9 +7,12 @@ using Microsoft.MixedReality.Toolkit.Input;
 public class HandTracking : MonoBehaviour
 {
     public GameObject sphereMarker;
-    GameObject thumbObject, indexObject, middleObject, ringObject, pinkyObject, wristObject;
+    GameObject thumbObject, middleObject, ringObject, pinkyObject, wristObject;
+    public GameObject indexObject;
     MixedRealityPose pose;
-    [SerializeField] private float projectileSpeed = 6f;
+    [SerializeField] private float projectileSpeed = 0.6f;
+    [SerializeField] private GameObject projectilePrefab;
+    private bool hasShot = false;
 
     // Threshold for detecting pinch
     [SerializeField] private float pinchThreshold = 0.03f;
@@ -62,7 +65,7 @@ public class HandTracking : MonoBehaviour
             {
                 isGunGestureDetected = true;
                 Debug.Log("Shooting");
-                //ShootProjectile();
+                ShootProjectile();
                 wasPinchDetectedBeforeGunGesture = false; // Reset after shooting
             }
         }
@@ -108,7 +111,8 @@ public class HandTracking : MonoBehaviour
         {
             return false;
         }
-
+        
+        hasShot = false;
         return true;
     }
 
@@ -140,12 +144,27 @@ public class HandTracking : MonoBehaviour
 
     void ShootProjectile()
     {
-        /*GameObject projectile = Instantiate(projectilePrefab, indexObject.transform.position, Quaternion.identity);
-        projectile.AddComponent<Projectile>();
-        Rigidbody rb = projectile.AddComponent<Rigidbody>();
+        if (hasShot) return;
+
+        GameObject projectile = Instantiate(projectilePrefab, indexObject.transform.position, Quaternion.identity);
+        if (projectile == null)
+        {
+            Debug.LogError("Projectile is not a valid object");
+            return;
+        }
+
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = projectile.AddComponent<Rigidbody>();
+        }
+
         rb.useGravity = false;
+        rb.isKinematic = false;
         Vector3 shootingDirection = (indexObject.transform.position - wristObject.transform.position).normalized;
-        rb.velocity = shootingDirection * projectileSpeed;*/
+        rb.velocity = shootingDirection * projectileSpeed;
+        hasShot = true;
     }
+
 
 }
