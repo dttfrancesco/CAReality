@@ -1,76 +1,71 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit.Input;
 
 public class HandTracking : MonoBehaviour
 {
     public GameObject sphereMarker;
-    GameObject thumbObject, middleObject, ringObject, pinkyObject, wristObject;
-    public GameObject indexObject;
+    public GameObject indexObject, wristObject, indexBaseObject;
+    GameObject thumbObject, middleObject, ringObject, pinkyObject;
     MixedRealityPose pose;
+
     [SerializeField] private float projectileSpeed = 0.6f;
     [SerializeField] private GameObject projectilePrefab;
-    private bool hasShot = false;
 
-    // Threshold for detecting pinch
-    [SerializeField] private float pinchThreshold = 0.03f;
-    // Threshold for detecting gunGesture
+    // Threshold for detecting pinch and gun gestures
+    [SerializeField] private float pinchThreshold = 0.04f;
     [SerializeField] private float gunThreshold = 0.05f;
 
-    // Gesture state
+    private bool hasShot = false;
     private bool isPinchDetected = false;
     private bool isGunGestureDetected = false;
     private bool wasPinchDetectedBeforeGunGesture = false;
 
     private void Start()
     {
+        // Initialize finger objects
         thumbObject = GameObject.Instantiate(sphereMarker, this.transform);
         indexObject = GameObject.Instantiate(sphereMarker, this.transform);
+        indexBaseObject = GameObject.Instantiate(sphereMarker, this.transform);
         middleObject = GameObject.Instantiate(sphereMarker, this.transform);
         ringObject = GameObject.Instantiate(sphereMarker, this.transform);
         pinkyObject = GameObject.Instantiate(sphereMarker, this.transform);
         wristObject = GameObject.Instantiate(sphereMarker, this.transform);
         wristObject.GetComponent<MeshRenderer>().enabled = false;
+        indexBaseObject.GetComponent<MeshRenderer>().enabled = false;
     }
 
     private void Update()
     {
-        // Disabling the renderer for all objects
+        //Disable renderers
         DisableRenderers();
 
-        // Updating the positions of all joints
+        // Update finger positions
         UpdateJointPosition(TrackedHandJoint.ThumbTip, thumbObject);
         UpdateJointPosition(TrackedHandJoint.IndexTip, indexObject);
         UpdateJointPosition(TrackedHandJoint.MiddleTip, middleObject);
         UpdateJointPosition(TrackedHandJoint.RingTip, ringObject);
         UpdateJointPosition(TrackedHandJoint.PinkyTip, pinkyObject);
+        UpdateJointPosition(TrackedHandJoint.IndexKnuckle, indexBaseObject);
         UpdateJointPosition(TrackedHandJoint.Wrist, wristObject);
 
+        // Check for pinch and gun gestures
         if (IsPinch())
         {
             isPinchDetected = true;
             wasPinchDetectedBeforeGunGesture = true;
+            hasShot = false;
+        }
+        else if (wasPinchDetectedBeforeGunGesture && IsGunGesture())
+        {
+            isGunGestureDetected = true;
+            Debug.Log("Shooting");
+            ShootProjectile();
+            wasPinchDetectedBeforeGunGesture = false; // Reset after shooting
         }
         else
         {
             isPinchDetected = false;
-        }
-
-        // If there was a pinch, check for a gun gesture
-        if (wasPinchDetectedBeforeGunGesture)
-        {
-            if (IsGunGesture())
-            {
-                isGunGestureDetected = true;
-                Debug.Log("Shooting");
-                ShootProjectile();
-                wasPinchDetectedBeforeGunGesture = false; // Reset after shooting
-            }
-        }
-        else
-        {
             isGunGestureDetected = false;
         }
     }
@@ -83,6 +78,7 @@ public class HandTracking : MonoBehaviour
         ringObject.GetComponent<Renderer>().enabled = false;
         pinkyObject.GetComponent<Renderer>().enabled = false;
         wristObject.GetComponent<Renderer>().enabled = false;
+        indexBaseObject.GetComponent<MeshRenderer>().enabled = false;
     }
 
     void UpdateJointPosition(TrackedHandJoint joint, GameObject jointObject)
@@ -91,6 +87,7 @@ public class HandTracking : MonoBehaviour
         {
             jointObject.GetComponent<Renderer>().enabled = true;
             wristObject.GetComponent<Renderer>().enabled = false;
+            indexBaseObject.GetComponent<MeshRenderer>().enabled = false;
             jointObject.transform.position = pose.Position;
         }
     }
@@ -161,10 +158,11 @@ public class HandTracking : MonoBehaviour
 
         rb.useGravity = false;
         rb.isKinematic = false;
-        Vector3 shootingDirection = (indexObject.transform.position - wristObject.transform.position).normalized;
+        Vector3 shootingDirection = (indexObject.transform.position - indexBaseObject.transform.position).normalized;
         rb.velocity = shootingDirection * projectileSpeed;
         hasShot = true;
     }
+
 
 
 }

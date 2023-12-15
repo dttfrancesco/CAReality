@@ -4,7 +4,6 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed = 4f;
     private Vector3 shootingDirection;
-    private GameObject indexTipObject;
 
     private void Start()
     {
@@ -14,27 +13,33 @@ public class Projectile : MonoBehaviour
             HandTracking handTrackingScript = gameManager.GetComponent<HandTracking>();
             if (handTrackingScript != null)
             {
-                indexTipObject = handTrackingScript.indexObject;
-            }
-        }
+                GameObject indexTipObject = handTrackingScript.indexObject;
+                GameObject indexBaseObject = handTrackingScript.indexBaseObject;
 
-        if (indexTipObject != null)
-        {
-            // Calcola la direzione usando la posizione della punta dell'indice
-            shootingDirection = (indexTipObject.transform.position - transform.position).normalized;
+                if (indexTipObject != null && indexBaseObject != null)
+                {
+                    // Calcola la direzione usando la posizione della punta e della base dell'indice
+                    shootingDirection = (indexTipObject.transform.position - indexBaseObject.transform.position).normalized;
+                }
+                else
+                {
+                    Debug.LogError("Index tip or base object not found.");
+                }
+            }
+            else
+            {
+                Debug.LogError("HandTracking script not found on GameManager.");
+            }
         }
         else
         {
-            Debug.LogError("Index tip object non trovato.");
+            Debug.LogError("GameManager not found in the scene.");
         }
     }
 
     private void Update()
     {
-        if (indexTipObject != null)
-        {
-            transform.Translate(shootingDirection * speed * Time.deltaTime, Space.World);
-        }
+        transform.Translate(shootingDirection * speed * Time.deltaTime, Space.World);
     }
 
     private void OnCollisionEnter(Collision collision)
