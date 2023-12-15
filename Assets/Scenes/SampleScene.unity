@@ -4217,8 +4217,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 788832055}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 8}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalPosition: {x: 0, y: 0, z: 9}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children:
   - {fileID: 719676446}
   - {fileID: 2123391526}
@@ -8274,8 +8274,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sphereMarker: {fileID: 6498718173284539196, guid: d11ec3208cb98364eb606633760ccd06,
     type: 3}
-  projectilePrefab: {fileID: 0}
-  projectileSpeed: 6
+  indexObject: {fileID: 0}
+  projectileSpeed: 0.6
+  projectilePrefab: {fileID: 5322801924130630379, guid: fdc7557227f608440b0c4cfe75253717,
+    type: 3}
   pinchThreshold: 0.03
   gunThreshold: 0.05
 --- !u!1 &1650222339
@@ -10682,7 +10684,7 @@ PrefabInstance:
     - target: {fileID: 8853686998778877107, guid: bc8416f411066af4d986d5013d9542c8,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8853686998778877110, guid: bc8416f411066af4d986d5013d9542c8,
         type: 3}
