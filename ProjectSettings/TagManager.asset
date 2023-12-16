@@ -6,6 +6,9 @@ TagManager:
   tags:
   - track
   - GameManager
+  - car1
+  - car2
+  - car3
   layers:
   - Default
   - TransparentFX

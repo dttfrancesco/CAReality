@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class RotatingObject : MonoBehaviour
 {
@@ -7,9 +8,9 @@ public class RotatingObject : MonoBehaviour
     public float rotationSpeed = 5f; // Rotation speed
 
     [Header("Action Probabilities")]
-    [Range(0, 100)] public int action1Probability = 60; // Probability for action 1
-    [Range(0, 100)] public int action2Probability = 25; // Probability for action 2
-    // Probability for action 3 is implied (100 - action1Probability - action2Probability)
+    [Range(0, 100)] public int action1Probability = 50; // Probability for action 1
+    [Range(0, 100)] public int rocketProbability = 30; // Probability for action 2
+    // Probability for action 3 is implied (100 - action1Probability - rocketProbability)
 
     void Update()
     {
@@ -21,17 +22,20 @@ public class RotatingObject : MonoBehaviour
     {
         // Randomly decide which action to perform
         int randomValue = Random.Range(0, 100);
-        if (randomValue < action1Probability)
+        if (other.gameObject.CompareTag("car1") || other.gameObject.CompareTag("car2") || other.gameObject.CompareTag("car3"))
         {
-            PerformAction1();
-        }
-        else if (randomValue < action1Probability + action2Probability)
-        {
-            PerformAction2();
-        }
-        else
-        {
-            PerformAction3();
+            if (randomValue < action1Probability)
+            {
+                PerformAction1();
+            }
+            else if (randomValue < action1Probability + rocketProbability)
+            {
+                Rocket(other);
+            }
+            else
+            {
+                PerformAction3();
+            }
         }
     }
 
@@ -41,11 +45,125 @@ public class RotatingObject : MonoBehaviour
         Debug.Log("Action 1 executed.");
     }
 
-    void PerformAction2()
+    void Rocket(Collider other)
     {
-        // Define what action 2 does
-        Debug.Log("Action 2 executed.");
+
+        if (other.gameObject.CompareTag("car1"))
+        {
+            
+
+            Transform rocketTransform = other.gameObject.transform.Find("rocket1");
+            if (rocketTransform != null)
+            {
+                rocketTransform.gameObject.SetActive(true);
+            }
+
+            Waypoints waypointsScript = other.gameObject.GetComponent<Waypoints>();
+            if (waypointsScript != null)
+            {
+                waypointsScript.maxSpeed = 0.1f;
+                waypointsScript.acceleration = 0.05f;
+            }
+
+            StartCoroutine(WaitAndReverse(other));
+        }
+
+        if (other.gameObject.CompareTag("car2"))
+        {
+
+
+            Transform rocketTransform = other.gameObject.transform.Find("rocket2");
+            if (rocketTransform != null)
+            {
+                rocketTransform.gameObject.SetActive(true);
+            }
+
+            Waypoints waypointsScript = other.gameObject.GetComponent<Waypoints>();
+            if (waypointsScript != null)
+            {
+                waypointsScript.maxSpeed = 0.1f;
+                waypointsScript.acceleration = 0.05f;
+            }
+
+            StartCoroutine(WaitAndReverse(other));
+        }
+
+        if (other.gameObject.CompareTag("car3"))
+        {
+
+
+            Transform rocketTransform = other.gameObject.transform.Find("rocket3");
+            if (rocketTransform != null)
+            {
+                rocketTransform.gameObject.SetActive(true);
+            }
+
+            Waypoints waypointsScript = other.gameObject.GetComponent<Waypoints>();
+            if (waypointsScript != null)
+            {
+                waypointsScript.maxSpeed = 0.1f;
+                waypointsScript.acceleration = 0.05f;
+            }
+
+            StartCoroutine(WaitAndReverse(other));
+        }
     }
+
+    private IEnumerator WaitAndReverse(Collider other)
+    {
+        yield return new WaitForSeconds(6);
+        if (other.gameObject.CompareTag("car1"))
+        {
+            
+            Transform rocketTransform = other.gameObject.transform.Find("rocket1");
+            if (rocketTransform != null)
+            {
+                rocketTransform.gameObject.SetActive(false);
+            }
+
+            Waypoints waypointsScript = other.gameObject.GetComponent<Waypoints>();
+            if (waypointsScript != null)
+            {
+                waypointsScript.maxSpeed = 0.06f;
+                waypointsScript.acceleration = 0.01f;
+            }
+        }
+
+        if (other.gameObject.CompareTag("car2"))
+        {
+
+            Transform rocketTransform = other.gameObject.transform.Find("rocket2");
+            if (rocketTransform != null)
+            {
+                rocketTransform.gameObject.SetActive(false);
+            }
+
+            Waypoints waypointsScript = other.gameObject.GetComponent<Waypoints>();
+            if (waypointsScript != null)
+            {
+                waypointsScript.maxSpeed = 0.06f;
+                waypointsScript.acceleration = 0.01f;
+            }
+        }
+
+        if (other.gameObject.CompareTag("car3"))
+        {
+
+            Transform rocketTransform = other.gameObject.transform.Find("rocket3");
+            if (rocketTransform != null)
+            {
+                rocketTransform.gameObject.SetActive(false);
+            }
+
+            Waypoints waypointsScript = other.gameObject.GetComponent<Waypoints>();
+            if (waypointsScript != null)
+            {
+                waypointsScript.maxSpeed = 0.06f;
+                waypointsScript.acceleration = 0.01f;
+            }
+        }
+    }
+
 
     void PerformAction3()
     {
