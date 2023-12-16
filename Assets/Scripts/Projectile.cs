@@ -2,51 +2,53 @@
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float speed = 4f;
-    private Vector3 shootingDirection;
-    private GameObject indexTipObject;
+    [SerializeField] private float gravityScale = 0.4f; // Adjust this value to change the gravity effect on the projectile
+    private Vector3 initialGravity; // Custom gravity force
+    private Rigidbody rb; // Cache the Rigidbody component
 
     private void Start()
     {
-        GameObject gameManager = GameObject.Find("GameManager");
-        if (gameManager != null)
-        {
-            HandTracking handTrackingScript = gameManager.GetComponent<HandTracking>();
-            if (handTrackingScript != null)
-            {
-                indexTipObject = handTrackingScript.indexObject;
-            }
-        }
+        // Initialize the custom gravity force based on Unity's gravity and the gravity scale
+        initialGravity = Physics.gravity * gravityScale;
 
-        if (indexTipObject != null)
+        // Ensure the Rigidbody is set up correctly
+        rb = GetComponent<Rigidbody>();
+        if (rb == null)
         {
-            // Calcola la direzione usando la posizione della punta dell'indice
-            shootingDirection = (indexTipObject.transform.position - transform.position).normalized;
+            rb = gameObject.AddComponent<Rigidbody>(); // Add a Rigidbody if not present
+        }
+        rb.useGravity = false; // Disable the default gravity
+        rb.isKinematic = false; // Ensure the object is not kinematic
+    }
+
+    private void FixedUpdate()
+    {
+        // Manually apply the custom gravity force
+        if (rb != null)
+        {
+            rb.AddForce(initialGravity, ForceMode.Acceleration);
         }
         else
         {
-            Debug.LogError("Index tip object non trovato.");
+            // For debugging
+            Debug.LogError("Rigidbody component not found on the projectile");
         }
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        if (indexTipObject != null)
+        // Handle collision with objects
+        if (other.gameObject.CompareTag("track"))
         {
-            transform.Translate(shootingDirection * speed * Time.deltaTime, Space.World);
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("track"))
-        {
-            // Stop the object
-            Rigidbody rb = GetComponent<Rigidbody>();
+            // Stop the object and make it a child of the "track" object
             if (rb != null)
             {
                 rb.velocity = Vector3.zero;
                 rb.isKinematic = true;
+                transform.SetParent(other.transform);
+                transform.rotation = Quaternion.Euler(-90, 0, 0);
+                transform.localPosition = new Vector3(transform.localPosition.x, 0.7f, transform.localPosition.z);
+                Debug.Log("Projectile collided with track and is now a child of it.");
             }
         }
     }

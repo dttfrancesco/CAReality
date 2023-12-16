@@ -17,7 +17,7 @@ public class ObjectBounce : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isBouncing)
+        if (!isBouncing && !other.gameObject.CompareTag("track"))
         {
             isBouncing = true;
             nerfEffect.Apply(other.gameObject);

@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - track
+  - GameManager
+  - car1
+  - car2
+  - car3
+  - thunder
   layers:
   - Default
   - TransparentFX
