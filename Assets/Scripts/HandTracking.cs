@@ -59,7 +59,7 @@ public class HandTracking : MonoBehaviour
         else if (wasPinchDetectedBeforeGunGesture && IsGunGesture())
         {
             isGunGestureDetected = true;
-            Debug.Log("Shooting");
+            //Debug.Log("Shooting");
             ShootProjectile();
             wasPinchDetectedBeforeGunGesture = false; // Reset after shooting
         }
@@ -141,25 +141,30 @@ public class HandTracking : MonoBehaviour
 
     void ShootProjectile()
     {
-        if (hasShot) return;
+        if (hasShot) return; // Prevents shooting multiple projectiles
 
-        GameObject projectile = Instantiate(projectilePrefab, indexObject.transform.position, Quaternion.identity);
+        // Instantiate the projectile at the index finger's position
+        GameObject projectile = Instantiate(projectilePrefab, indexObject.transform.position, Quaternion.Euler(-90, 0, 0));
+        projectile.AddComponent<Projectile>();
         if (projectile == null)
         {
             Debug.LogError("Projectile is not a valid object");
             return;
         }
 
+
+        // Ensure the projectile has a Rigidbody component
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
         if (rb == null)
         {
             rb = projectile.AddComponent<Rigidbody>();
         }
 
-        rb.useGravity = false;
-        rb.isKinematic = false;
-        Vector3 shootingDirection = (indexObject.transform.position - indexBaseObject.transform.position).normalized;
-        rb.velocity = shootingDirection * projectileSpeed;
+        // Set initial Rigidbody properties
+        rb.useGravity = false; 
+        rb.isKinematic = false; // Allows the projectile to be affected by physics
+
+        // Mark that a projectile has been shot
         hasShot = true;
     }
 

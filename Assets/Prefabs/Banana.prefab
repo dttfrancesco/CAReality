@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4634512722920228958}
   - component: {fileID: 7473142548356185236}
   - component: {fileID: 8850688139937580651}
-  - component: {fileID: 1128542578248235389}
+  - component: {fileID: 52741241390587986}
   m_Layer: 0
   m_Name: Banana
   m_TagString: Untagged
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8986110611252256065}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.06, y: -0.27, z: 0.8}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.002, y: 0.002, z: 0.002}
   m_Children: []
   m_Father: {fileID: 0}
@@ -94,13 +94,13 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &1128542578248235389
-MeshCollider:
+--- !u!135 &52741241390587986
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -109,7 +109,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3890010298973275403, guid: 2b548b931105ba9458e9044e4b6702d0, type: 3}
+  serializedVersion: 2
+  m_Radius: 7.9106417
+  m_Center: {x: 1.5448492, y: 0.050703287, z: 0}

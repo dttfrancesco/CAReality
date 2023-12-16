@@ -2,74 +2,53 @@
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float speed = 4f; // Speed of the projectile
-    [SerializeField] private float maxDistance = 1f; // Maximum travel distance of the projectile
-    private Vector3 shootingDirection; // Direction in which the projectile will be shot
-    private Vector3 startPosition; // Starting position of the projectile
-
-    private Vector3 gravity = new Vector3(0, -9.81f, 0); // Gravity effect
-    private float timeSinceShot = 0f; // Time since the projectile was shot
+    [SerializeField] private float gravityScale = 0.4f; // Adjust this value to change the gravity effect on the projectile
+    private Vector3 initialGravity; // Custom gravity force
+    private Rigidbody rb; // Cache the Rigidbody component
 
     private void Start()
     {
-        startPosition = transform.position; // Save the starting position
-        GameObject gameManager = GameObject.Find("GameManager");
+        // Initialize the custom gravity force based on Unity's gravity and the gravity scale
+        initialGravity = Physics.gravity * gravityScale;
 
-        // Find and set the shooting direction based on the index finger position
-        if (gameManager != null)
+        // Ensure the Rigidbody is set up correctly
+        rb = GetComponent<Rigidbody>();
+        if (rb == null)
         {
-            HandTracking handTrackingScript = gameManager.GetComponent<HandTracking>();
-            if (handTrackingScript != null)
-            {
-                GameObject indexTipObject = handTrackingScript.indexObject;
-                GameObject indexBaseObject = handTrackingScript.indexBaseObject;
+            rb = gameObject.AddComponent<Rigidbody>(); // Add a Rigidbody if not present
+        }
+        rb.useGravity = false; // Disable the default gravity
+        rb.isKinematic = false; // Ensure the object is not kinematic
+    }
 
-                if (indexTipObject != null && indexBaseObject != null)
-                {
-                    shootingDirection = (indexTipObject.transform.position - indexBaseObject.transform.position).normalized;
-                }
-                else
-                {
-                    Debug.LogError("Index tip or base object not found.");
-                }
-            }
-            else
-            {
-                Debug.LogError("HandTracking script not found on GameManager.");
-            }
+    private void FixedUpdate()
+    {
+        // Manually apply the custom gravity force
+        if (rb != null)
+        {
+            rb.AddForce(initialGravity, ForceMode.Acceleration);
         }
         else
         {
-            Debug.LogError("GameManager not found in the scene.");
+            // For debugging
+            Debug.LogError("Rigidbody component not found on the projectile");
         }
     }
 
-    private void Update()
-    {
-        timeSinceShot += Time.deltaTime;
-        Vector3 gravityEffect = gravity * timeSinceShot * timeSinceShot / 2; // Calculate the effect of gravity
-
-        Vector3 currentDirection = shootingDirection * speed * timeSinceShot + gravityEffect;
-        transform.position = startPosition + currentDirection; // Update position
-
-        // Check if the projectile has traveled beyond the maximum distance
-        if (Vector3.Distance(startPosition, transform.position) > maxDistance)
-        {
-            gameObject.SetActive(false); // Destroy the object if it exceeds the maximum distance
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         // Handle collision with objects
-        if (collision.gameObject.CompareTag("track"))
+        if (other.gameObject.CompareTag("track"))
         {
-            // Stop the object
-            Rigidbody rb = GetComponent<Rigidbody>();
+            // Stop the object and make it a child of the "track" object
             if (rb != null)
             {
                 rb.velocity = Vector3.zero;
                 rb.isKinematic = true;
+                transform.SetParent(other.transform);
+                transform.rotation = Quaternion.Euler(-90, 0, 0);
+                transform.localPosition = new Vector3(transform.localPosition.x, 0.7f, transform.localPosition.z);
+                Debug.Log("Projectile collided with track and is now a child of it.");
             }
         }
     }
