@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97aa553efae3fbd4eb0685d045af0534, type: 3}
   m_Name: MajorSpeedNerf
   m_EditorClassIdentifier: 
-  Maxamount: -4
-  Accamount: -4
+  Maxamount: -0.04
+  Accamount: -0.04

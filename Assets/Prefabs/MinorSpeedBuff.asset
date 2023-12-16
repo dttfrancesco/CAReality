@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97aa553efae3fbd4eb0685d045af0534, type: 3}
   m_Name: MinorSpeedBuff
   m_EditorClassIdentifier: 
-  Maxamount: 2
-  Accamount: 2
+  Maxamount: 0.02
+  Accamount: 0.02
