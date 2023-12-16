@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class RotatingObject : MonoBehaviour
 {
@@ -8,9 +10,11 @@ public class RotatingObject : MonoBehaviour
     public float rotationSpeed = 5f; // Rotation speed
 
     [Header("Action Probabilities")]
-    [Range(0, 100)] public int action1Probability = 50; // Probability for action 1
-    [Range(0, 100)] public int rocketProbability = 30; // Probability for action 2
-    // Probability for action 3 is implied (100 - action1Probability - rocketProbability)
+    [Range(0, 100)] public int lightningProbability = 50; // Probability for action 1
+    [Range(0, 100)] public int rocketProbability = 50; // Probability for action 2
+    List<GameObject> scaledObjects = new List<GameObject>();
+    [SerializeField] private GameObject thunderObject;
+
 
     void Update()
     {
@@ -24,26 +28,94 @@ public class RotatingObject : MonoBehaviour
         int randomValue = Random.Range(0, 100);
         if (other.gameObject.CompareTag("car1") || other.gameObject.CompareTag("car2") || other.gameObject.CompareTag("car3"))
         {
-            if (randomValue < action1Probability)
+            if (randomValue < lightningProbability)
             {
-                PerformAction1();
+                Lightning(other);
             }
-            else if (randomValue < action1Probability + rocketProbability)
+            else if (randomValue < lightningProbability + rocketProbability)
             {
                 Rocket(other);
-            }
-            else
-            {
-                PerformAction3();
             }
         }
     }
 
-    void PerformAction1()
+    void Lightning(Collider other)
     {
-        // Define what action 1 does
-        Debug.Log("Action 1 executed.");
+        // Find the GameObject with the tag "thunder" and make it active
+        if (thunderObject != null)
+        {
+            thunderObject.SetActive(true);
+        }
+
+        // Clear the list for new entries if it's the first interaction
+        if (!scaledObjects.Any())
+        {
+            scaledObjects.Clear();
+        }
+
+        // Function to scale and add to list if not already scaled
+        void ScaleAndAdd(GameObject car)
+        {
+            if (car != null && !scaledObjects.Contains(car))
+            {
+                car.transform.localScale *= 0.5f;  // Scale divided by 2
+                scaledObjects.Add(car);
+            }
+        }
+
+        // Check if the collider tag is "car1"
+        if (other.gameObject.CompareTag("car1"))
+        {
+            // Find objects with tag "car2" and "car3" and apply scale if not already done
+            ScaleAndAdd(GameObject.FindGameObjectWithTag("car2"));
+            ScaleAndAdd(GameObject.FindGameObjectWithTag("car3"));
+        }
+        // Check if the collider tag is "car2"
+        else if (other.gameObject.CompareTag("car2"))
+        {
+            // Find objects with tag "car1" and "car3" and apply scale if not already done
+            ScaleAndAdd(GameObject.FindGameObjectWithTag("car1"));
+            ScaleAndAdd(GameObject.FindGameObjectWithTag("car3"));
+        }
+        // Check if the collider tag is "car3"
+        else if (other.gameObject.CompareTag("car3"))
+        {
+            // Find objects with tag "car1" and "car2" and apply scale if not already done
+            ScaleAndAdd(GameObject.FindGameObjectWithTag("car1"));
+            ScaleAndAdd(GameObject.FindGameObjectWithTag("car2"));
+        }
+
+        // Start the Coroutine to reset the scale only if there are scaled objects
+        if (scaledObjects.Any())
+        {
+            StartCoroutine(ResetScaleCoroutine(scaledObjects));
+        }
     }
+
+    IEnumerator ResetScaleCoroutine(List<GameObject> objectsToScale)
+    {
+        // Wait for 5 seconds
+        yield return new WaitForSeconds(5f);
+
+        // Loop through each object and multiply its scale by 2 to reset it
+        foreach (var obj in objectsToScale)
+        {
+            if (obj != null)
+                obj.transform.localScale *= 2f;  // Scale multiplied by 2 to reset
+        }
+
+        // Find the GameObject with the tag "thunder" and make it inactive
+        if (thunderObject != null)
+        {
+            thunderObject.SetActive(false);
+        }
+
+        // Clear the list after resetting scale
+        scaledObjects.Clear();
+    }
+
+
+
 
     void Rocket(Collider other)
     {
@@ -162,12 +234,5 @@ public class RotatingObject : MonoBehaviour
                 waypointsScript.acceleration = 0.01f;
             }
         }
-    }
-
-
-    void PerformAction3()
-    {
-        // Define what action 3 does
-        Debug.Log("Action 3 executed.");
     }
 }

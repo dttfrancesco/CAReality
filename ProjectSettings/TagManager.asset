@@ -9,6 +9,7 @@ TagManager:
   - car1
   - car2
   - car3
+  - thunder
   layers:
   - Default
   - TransparentFX
