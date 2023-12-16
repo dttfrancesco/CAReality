@@ -160,6 +160,9 @@ public class HandTracking : MonoBehaviour
             rb = projectile.AddComponent<Rigidbody>();
         }
 
+        SphereCollider sc = projectile.GetComponent<SphereCollider>();
+        sc.isTrigger = true;
+
         // Set initial Rigidbody properties
         rb.useGravity = false; 
         rb.isKinematic = false; // Allows the projectile to be affected by physics

@@ -1965,8 +1965,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9fb9706cdcef0488d60ca82a5f5029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bounceHeight: 2
-  bounceLenght: 2
+  bounceHeight: 0.06
+  bounceLenght: 0.09
   nerfEffect: {fileID: 11400000, guid: 795b2475486b46d42a702f20ec7a13d4, type: 2}
   nerfEffectRemoval: {fileID: 11400000, guid: 9591088b7c9e30546933d99cc3759dde, type: 2}
 --- !u!1 &262770994
