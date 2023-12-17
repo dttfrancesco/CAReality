@@ -14,9 +14,10 @@ public class PowerUp : MonoBehaviour
         {
             collidedObject = other.gameObject; // Store the object that triggered the power-up
             powerUpEffect.Apply(collidedObject);
-            gameObject.SetActive(false);
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
 
             StartCoroutine(DelayedRemovalEffect());
+            gameObject.SetActive(false);
         }
     }
 
