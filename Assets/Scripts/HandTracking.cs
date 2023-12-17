@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit.Input;
+using System.Collections;
 
 public class HandTracking : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class HandTracking : MonoBehaviour
     private bool isPinchDetected = false;
     private bool isGunGestureDetected = false;
     private bool wasPinchDetectedBeforeGunGesture = false;
+    private bool isPowerUpActive = false;
 
     private void Start()
     {
@@ -156,6 +158,7 @@ public class HandTracking : MonoBehaviour
 
     void ShootProjectile()
     {
+        if (!isPowerUpActive) return;
         if (hasShot) return; // Prevents multiple projectiles from being fired
 
         // Calculate the direction of the index finger
@@ -193,6 +196,18 @@ public class HandTracking : MonoBehaviour
 
         // Mark that a projectile has been fired
         hasShot = true;
+    }
+
+    public void ActivatePowerUp()
+    {
+        StartCoroutine(PowerUpRoutine());
+    }
+
+    private IEnumerator PowerUpRoutine()
+    {
+        isPowerUpActive = true;
+        yield return new WaitForSeconds(15f); // Wait for 15 seconds
+        isPowerUpActive = false;
     }
 
 }
