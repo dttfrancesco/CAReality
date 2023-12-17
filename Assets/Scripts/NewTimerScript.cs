@@ -7,29 +7,20 @@ public class NewTimerScript : MonoBehaviour
 {
     public TextMeshProUGUI timerText;
     private float startTime;
-    private bool isTimerRunning;
-    [SerializeField] private GameManager gameManager; // Reference to GameManager script
-
-    void Start()
-    {
-        // Get a reference to the GameManager script
-        gameManager = GameManager.Instance;
-
-        // Initialize the timer state
-        isTimerRunning = false;
-        startTime = Time.time;
-    }
+    private bool startTimeInitialized = false;
+    public GameObject gameManager;
 
     void Update()
     {
-        // Check the game state from GameManager directly
-        if (gameManager.CurrentState == GameManager.GameState.Running)
+        GameManager.GameState currentState = gameManager.GetComponent<GameManager>().CurrentState;
+
+        if (currentState == GameManager.GameState.Running)
         {
-            if (!isTimerRunning)
+            // Initialize startTime once when the game state changes to Running
+            if (!startTimeInitialized)
             {
-                // Start the timer when the game state transitions to "Running"
                 startTime = Time.time;
-                isTimerRunning = true;
+                startTimeInitialized = true;
             }
 
             float t = Time.time - startTime;
@@ -39,8 +30,7 @@ public class NewTimerScript : MonoBehaviour
         }
         else
         {
-            // Reset the timer when the game is not running
-            isTimerRunning = false;
+            startTimeInitialized = false; // Reset for the next time the game enters Running state
         }
     }
 }

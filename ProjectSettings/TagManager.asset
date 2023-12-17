@@ -10,6 +10,11 @@ TagManager:
   - car2
   - car3
   - thunder
+  - startButton
+  - nextButton
+  - previousButton
+  - circuit
+  - gameBase
   layers:
   - Default
   - TransparentFX
