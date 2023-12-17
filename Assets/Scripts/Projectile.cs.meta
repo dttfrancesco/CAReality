@@ -3,7 +3,10 @@ guid: 3fa1575db62f92e4fbf298a03fb52615
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - nerfEffect: {fileID: 11400000, guid: 9459213d3bae77a4d86173a563f30508, type: 2}
+  - nerfEffectRemoval: {fileID: 11400000, guid: 07068d9bf4a6aaf4f9458ccdae56284b,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

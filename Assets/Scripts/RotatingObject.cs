@@ -14,6 +14,7 @@ public class RotatingObject : MonoBehaviour
     [Range(0, 100)] public int rocketProbability = 50; // Probability for action 2
     List<GameObject> scaledObjects = new List<GameObject>();
     [SerializeField] private GameObject thunderObject;
+    private bool isPowerUpActive = false;
 
 
     void Update()
@@ -24,6 +25,7 @@ public class RotatingObject : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (isPowerUpActive) return;
         // Randomly decide which action to perform
         int randomValue = Random.Range(0, 100);
         if (other.gameObject.CompareTag("car1") || other.gameObject.CompareTag("car2") || other.gameObject.CompareTag("car3"))
@@ -45,6 +47,7 @@ public class RotatingObject : MonoBehaviour
         if (thunderObject != null)
         {
             thunderObject.SetActive(true);
+            isPowerUpActive = true;
         }
 
         // Clear the list for new entries if it's the first interaction
@@ -112,6 +115,7 @@ public class RotatingObject : MonoBehaviour
 
         // Clear the list after resetting scale
         scaledObjects.Clear();
+        isPowerUpActive = false;
     }
 
 
@@ -122,8 +126,8 @@ public class RotatingObject : MonoBehaviour
 
         if (other.gameObject.CompareTag("car1"))
         {
-            
 
+            isPowerUpActive = true;
             Transform rocketTransform = other.gameObject.transform.Find("rocket1");
             if (rocketTransform != null)
             {
@@ -143,7 +147,7 @@ public class RotatingObject : MonoBehaviour
         if (other.gameObject.CompareTag("car2"))
         {
 
-
+            isPowerUpActive = true;
             Transform rocketTransform = other.gameObject.transform.Find("rocket2");
             if (rocketTransform != null)
             {
@@ -163,7 +167,7 @@ public class RotatingObject : MonoBehaviour
         if (other.gameObject.CompareTag("car3"))
         {
 
-
+            isPowerUpActive = true;
             Transform rocketTransform = other.gameObject.transform.Find("rocket3");
             if (rocketTransform != null)
             {
@@ -234,5 +238,6 @@ public class RotatingObject : MonoBehaviour
                 waypointsScript.acceleration = 0.01f;
             }
         }
+        isPowerUpActive = false;
     }
 }

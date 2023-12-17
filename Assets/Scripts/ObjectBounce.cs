@@ -3,8 +3,8 @@ using System.Collections;
 
 public class ObjectBounce : MonoBehaviour
 {
-    [SerializeField] float bounceHeight = 2.0f;
-    [SerializeField] float bounceLenght = -2.0f;
+    [SerializeField] float bounceHeight = 0.006f;
+    [SerializeField] float bounceLenght = -0.006f;
     private bool isBouncing = false;
     private Vector3 originalPosition;
     [SerializeField] PowerUpEffect nerfEffect;

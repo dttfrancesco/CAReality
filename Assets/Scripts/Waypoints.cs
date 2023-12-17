@@ -9,6 +9,7 @@ public class Waypoints : MonoBehaviour
     [SerializeField] private float decelerationDistance = 0.2f;
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float WPradius = 0.2f;
+    public bool isUnderBananaDominance = false;
 
     private float currentSpeed = 0f;
 

@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float gravityScale = 0.4f; // Adjust this value to change the gravity effect on the projectile
     private Vector3 initialGravity; // Custom gravity force
     private Rigidbody rb; // Cache the Rigidbody component
+    [SerializeField] PowerUpEffect nerfEffect;
+    [SerializeField] PowerUpEffect nerfEffectRemoval;
 
     private void Start()
     {
         // Initialize the custom gravity force based on Unity's gravity and the gravity scale
         initialGravity = Physics.gravity * gravityScale;
+
+        nerfEffect = Resources.Load<PowerUpEffect>("MinorSpeedNerf");
+        nerfEffectRemoval = Resources.Load<PowerUpEffect>("MinorSpeedBuff");
 
         // Ensure the Rigidbody is set up correctly
         rb = GetComponent<Rigidbody>();
@@ -20,6 +26,7 @@ public class Projectile : MonoBehaviour
         rb.useGravity = false; // Disable the default gravity
         rb.isKinematic = false; // Ensure the object is not kinematic
     }
+
 
     private void FixedUpdate()
     {
@@ -48,8 +55,38 @@ public class Projectile : MonoBehaviour
                 transform.SetParent(other.transform);
                 transform.rotation = Quaternion.Euler(-90, 0, 0);
                 transform.localPosition = new Vector3(transform.localPosition.x, 0.7f, transform.localPosition.z);
-                Debug.Log("Projectile collided with track and is now a child of it.");
             }
         }
+        if ((other.gameObject.CompareTag("car1") || other.gameObject.CompareTag("car2") || other.gameObject.CompareTag("car3")) && other.GetComponent<Waypoints>().isUnderBananaDominance == false)
+        {
+            nerfEffect.Apply(other.gameObject);
+            other.GetComponent<Waypoints>().isUnderBananaDominance = true;
+            transform.GetComponent<MeshRenderer>().enabled = false;
+            NerfRemoval(other.gameObject);
+        }
     }
+
+    IEnumerator NerfRemoval(GameObject collidedObject)
+    {
+        Debug.Log(collidedObject.name);
+        // Wait for 2 seconds before applying the effect
+        float timer = 0;
+        while (timer < 2f)
+        {
+            // Check if the collided object still exists
+            if (collidedObject != null)
+            {
+                nerfEffectRemoval.Apply(collidedObject);
+                gameObject.SetActive(false);
+            }
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        collidedObject.GetComponent<Waypoints>().isUnderBananaDominance = false;
+
+    }
+
+
+
 }

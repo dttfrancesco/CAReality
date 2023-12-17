@@ -10,7 +10,7 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.gameObject.CompareTag("track"))
+        if (!other.gameObject.CompareTag("track") && other.GetComponent<Waypoints>().isUnderBananaDominance==false)
         {
             collidedObject = other.gameObject; // Store the object that triggered the power-up
             powerUpEffect.Apply(collidedObject);
