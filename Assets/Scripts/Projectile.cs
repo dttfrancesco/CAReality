@@ -68,7 +68,7 @@ public class Projectile : MonoBehaviour
 
     IEnumerator NerfRemoval(GameObject collidedObject)
     {
-        Debug.Log(collidedObject.name);
+        //Debug.Log(collidedObject.name);
         // Wait for 2 seconds before applying the effect
         float timer = 0;
         while (timer < 2f)

@@ -6,7 +6,7 @@ public class CharacterSelection : MonoBehaviour
     public GameObject[] characters;
     public GameObject canvas;
     public int selectedCharacter = 0;
-    [SerializeField] GameObject fuckFilippo;
+    [SerializeField] GameObject gameManager;
 
     public void NextCharacter()
     {
@@ -28,11 +28,14 @@ public class CharacterSelection : MonoBehaviour
 
     public void StartGame()
     {
-        Debug.Log("Fuck you Filippo!!!!!!!");
-        fuckFilippo.GetComponent<GameManager>().GoRunning();
+        gameManager.GetComponent<GameManager>().GoRunning();
         PlayerPrefs.SetInt("selectedCharacter", selectedCharacter);
         canvas.SetActive(false); // Hide the canvas
-        characters[selectedCharacter].SetActive(true); // Show the selected character
-        //SceneManager.LoadScene(1, LoadSceneMode.Single);
+        characters[selectedCharacter].GetComponent<Waypoints>().makeChacraterSelected();
+        foreach (var character in characters)
+        {
+            character.SetActive(true);
+        }
+
     }
 }

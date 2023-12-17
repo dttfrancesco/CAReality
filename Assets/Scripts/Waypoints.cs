@@ -10,6 +10,7 @@ public class Waypoints : MonoBehaviour
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float WPradius = 0.2f;
     public bool isUnderBananaDominance = false;
+    public bool isSelectedCharacter = false;
 
     private float currentSpeed = 0f;
 
@@ -53,5 +54,10 @@ public class Waypoints : MonoBehaviour
 
         // Move the object
         transform.position += transform.forward * currentSpeed * Time.deltaTime;
+    }
+
+    public void makeChacraterSelected()
+    {
+        isSelectedCharacter = true;
     }
 }
