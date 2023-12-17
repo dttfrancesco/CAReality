@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class CanvasManager : MonoBehaviour
 {
-
+    public bool activateCanva = false;
     public Canvas[] quizCanvases;  
 
     void Start()
     {
         DeactivateAllCanvases();
 
-        int randomCanvasIndex = Random.Range(0, quizCanvases.Length);
-        ActivateCanvas(randomCanvasIndex);
+       
+
+    }
+
+    void Update()
+    {
+        if(activateCanva){
+            int randomCanvasIndex = Random.Range(0, quizCanvases.Length);
+            ActivateCanvas(1);
+        }
     }
 
     void ActivateCanvas(int canvasIndex)
@@ -20,7 +28,13 @@ public class CanvasManager : MonoBehaviour
         if (canvasIndex >= 0 && canvasIndex < quizCanvases.Length)
         {
             quizCanvases[canvasIndex].gameObject.SetActive(true);
+            activateCanva = false;
         }
+    }
+
+    public void canvaSetter()
+    {
+        activateCanva = true;
     }
 
     void DeactivateAllCanvases()
