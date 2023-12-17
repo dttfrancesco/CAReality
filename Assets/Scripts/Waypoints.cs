@@ -11,7 +11,8 @@ public class Waypoints : MonoBehaviour
     [SerializeField] private float WPradius = 0.2f;
     public bool isUnderBananaDominance = false;
     public bool isSelectedCharacter = false;
-
+    public bool isUnderShield = false;
+    public bool skipPowerUp = false;
     private float currentSpeed = 0f;
 
     void Update()
@@ -60,4 +61,25 @@ public class Waypoints : MonoBehaviour
     {
         isSelectedCharacter = true;
     }
+
+    public void makeUnderShieldProtection()
+    {
+        isUnderShield = true;
+    }
+
+    public void removeShieldProtection()
+    {
+        isUnderShield = false;
+    }
+
+    public void skipOnePowerUp()
+    {
+        skipPowerUp = true;
+    }
+
+    public void RestorePowerUp()
+    {
+        skipPowerUp = false;
+    }
+
 }

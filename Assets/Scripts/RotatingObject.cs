@@ -30,13 +30,21 @@ public class RotatingObject : MonoBehaviour
         int randomValue = Random.Range(0, 100);
         if (other.gameObject.CompareTag("car1") || other.gameObject.CompareTag("car2") || other.gameObject.CompareTag("car3"))
         {
-            if (randomValue < lightningProbability)
+            if (other.gameObject.GetComponent<Waypoints>().skipPowerUp)
             {
-                Lightning(other);
+                other.gameObject.GetComponent<Waypoints>().RestorePowerUp();
+                return;
             }
-            else if (randomValue < lightningProbability + rocketProbability)
+            else
             {
-                Rocket(other);
+                if (randomValue < lightningProbability)
+                {
+                    Lightning(other);
+                }
+                else if (randomValue < lightningProbability + rocketProbability)
+                {
+                    Rocket(other);
+                }
             }
         }
     }
@@ -69,6 +77,16 @@ public class RotatingObject : MonoBehaviour
         // Check if the collider tag is "car1"
         if (other.gameObject.CompareTag("car1"))
         {
+            if(GameObject.FindGameObjectWithTag("car2").GetComponent<Waypoints>().isUnderShield)
+            {
+                ScaleAndAdd(GameObject.FindGameObjectWithTag("car3"));
+                GameObject.FindGameObjectWithTag("car2").GetComponent<Waypoints>().removeShieldProtection();
+            }
+            if (GameObject.FindGameObjectWithTag("car3").GetComponent<Waypoints>().isUnderShield)
+            {
+                ScaleAndAdd(GameObject.FindGameObjectWithTag("car2"));
+                GameObject.FindGameObjectWithTag("car3").GetComponent<Waypoints>().removeShieldProtection();
+            }
             // Find objects with tag "car2" and "car3" and apply scale if not already done
             ScaleAndAdd(GameObject.FindGameObjectWithTag("car2"));
             ScaleAndAdd(GameObject.FindGameObjectWithTag("car3"));
@@ -76,6 +94,16 @@ public class RotatingObject : MonoBehaviour
         // Check if the collider tag is "car2"
         else if (other.gameObject.CompareTag("car2"))
         {
+            if(GameObject.FindGameObjectWithTag("car1").GetComponent<Waypoints>().isUnderShield)
+            {
+                ScaleAndAdd(GameObject.FindGameObjectWithTag("car3"));
+                GameObject.FindGameObjectWithTag("car1").GetComponent<Waypoints>().removeShieldProtection();
+            }
+            if (GameObject.FindGameObjectWithTag("car3").GetComponent<Waypoints>().isUnderShield)
+            {
+                ScaleAndAdd(GameObject.FindGameObjectWithTag("car1"));
+                GameObject.FindGameObjectWithTag("car3").GetComponent<Waypoints>().removeShieldProtection();
+            }
             // Find objects with tag "car1" and "car3" and apply scale if not already done
             ScaleAndAdd(GameObject.FindGameObjectWithTag("car1"));
             ScaleAndAdd(GameObject.FindGameObjectWithTag("car3"));
@@ -83,6 +111,16 @@ public class RotatingObject : MonoBehaviour
         // Check if the collider tag is "car3"
         else if (other.gameObject.CompareTag("car3"))
         {
+            if (GameObject.FindGameObjectWithTag("car1").GetComponent<Waypoints>().isUnderShield)
+            {
+                ScaleAndAdd(GameObject.FindGameObjectWithTag("car2"));
+                GameObject.FindGameObjectWithTag("car1").GetComponent<Waypoints>().removeShieldProtection();
+            }
+            if (GameObject.FindGameObjectWithTag("car2").GetComponent<Waypoints>().isUnderShield)
+            {
+                ScaleAndAdd(GameObject.FindGameObjectWithTag("car1"));
+                GameObject.FindGameObjectWithTag("car2").GetComponent<Waypoints>().removeShieldProtection();
+            }
             // Find objects with tag "car1" and "car2" and apply scale if not already done
             ScaleAndAdd(GameObject.FindGameObjectWithTag("car1"));
             ScaleAndAdd(GameObject.FindGameObjectWithTag("car2"));

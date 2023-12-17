@@ -77,4 +77,30 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = GameState.Victory;
     }
+
+    public void ApplyShield()
+    {
+        if (GameObject.FindGameObjectWithTag("car1").GetComponent<Waypoints>().isSelectedCharacter) GameObject.FindGameObjectWithTag("car1").GetComponent<Waypoints>().makeUnderShieldProtection();
+        if (GameObject.FindGameObjectWithTag("car2").GetComponent<Waypoints>().isSelectedCharacter) GameObject.FindGameObjectWithTag("car2").GetComponent<Waypoints>().makeUnderShieldProtection();
+        if (GameObject.FindGameObjectWithTag("car3").GetComponent<Waypoints>().isSelectedCharacter) GameObject.FindGameObjectWithTag("car3").GetComponent<Waypoints>().makeUnderShieldProtection();
+    }
+
+    public void ApplyPowerUpRemoval()
+    {
+        if (GameObject.FindGameObjectWithTag("car1").GetComponent<Waypoints>().isSelectedCharacter)
+        {
+            GameObject.FindGameObjectWithTag("car2").GetComponent<Waypoints>().skipOnePowerUp();
+            GameObject.FindGameObjectWithTag("car3").GetComponent<Waypoints>().skipOnePowerUp();
+        }
+        if (GameObject.FindGameObjectWithTag("car2").GetComponent<Waypoints>().isSelectedCharacter)
+        {
+            GameObject.FindGameObjectWithTag("car1").GetComponent<Waypoints>().skipOnePowerUp();
+            GameObject.FindGameObjectWithTag("car3").GetComponent<Waypoints>().skipOnePowerUp();
+        }
+        if (GameObject.FindGameObjectWithTag("car3").GetComponent<Waypoints>().isSelectedCharacter)
+        {
+            GameObject.FindGameObjectWithTag("car1").GetComponent<Waypoints>().skipOnePowerUp();
+            GameObject.FindGameObjectWithTag("car2").GetComponent<Waypoints>().skipOnePowerUp();
+        }
+    }
 }
