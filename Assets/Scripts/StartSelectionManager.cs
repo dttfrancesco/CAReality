@@ -6,6 +6,9 @@ public class StartSelectionManager : MonoBehaviour
 {
     [SerializeField] private GameObject gameManager;
     [SerializeField] private GameObject circuit;
+    [SerializeField] private GameObject car1;
+    [SerializeField] private GameObject car2;
+    [SerializeField] private GameObject car3;
 
     private Dictionary<GameObject, Vector3> originalScales;
 
@@ -15,17 +18,17 @@ public class StartSelectionManager : MonoBehaviour
         originalScales = new Dictionary<GameObject, Vector3>();
         StoreOriginalScales();
         scaleTransform();
-        ScaleUp(GameObject.FindGameObjectWithTag("car1"));
-        ScaleUp(GameObject.FindGameObjectWithTag("car2"));
-        ScaleUp(GameObject.FindGameObjectWithTag("car3"));
+        ScaleUp(car1);
+        ScaleUp(car2);
+        ScaleUp(car3);
         circuit.SetActive(false);
     }
 
     void StoreOriginalScales()
     {
-        StoreScale(GameObject.FindGameObjectWithTag("car1"));
-        StoreScale(GameObject.FindGameObjectWithTag("car2"));
-        StoreScale(GameObject.FindGameObjectWithTag("car3"));
+        StoreScale(car1);
+        StoreScale(car2);
+        StoreScale(car3);
     }
 
     void StoreScale(GameObject car)
@@ -62,10 +65,12 @@ public class StartSelectionManager : MonoBehaviour
     {
         transform.localScale *= 0.2f;
         circuit.SetActive(true);
-        RestoreOriginalScale(GameObject.FindGameObjectWithTag("car1"));
-        RestoreOriginalScale(GameObject.FindGameObjectWithTag("car2"));
-        RestoreOriginalScale(GameObject.FindGameObjectWithTag("car3"));
-        GameObject.Find("Circuit").SetActive(true);
+        //RestoreOriginalScale(GameObject.FindGameObjectWithTag("car1"));
+        //RestoreOriginalScale(GameObject.FindGameObjectWithTag("car2"));
+        //RestoreOriginalScale(GameObject.FindGameObjectWithTag("car3"));
+        car1.transform.localScale *= 0.2f;
+        car2.transform.localScale *= 0.2f;
+        car3.transform.localScale *= 0.2f;
         GameObject.FindGameObjectWithTag("nextButton").SetActive(false);
         GameObject.FindGameObjectWithTag("previousButton").SetActive(false);
         transform.position = new Vector3(0, 0, 9);
