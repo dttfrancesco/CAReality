@@ -2554,6 +2554,7 @@ MonoBehaviour:
   decelerationDistance: 0.0005
   rotationSpeed: 1
   WPradius: 0.02
+  isUnderBananaDominance: 0
 --- !u!64 &371974216
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8340,6 +8341,7 @@ MonoBehaviour:
   decelerationDistance: 0.0005
   rotationSpeed: 1
   WPradius: 0.02
+  isUnderBananaDominance: 0
 --- !u!64 &1131833091
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -10382,6 +10384,7 @@ MonoBehaviour:
   decelerationDistance: 0.0005
   rotationSpeed: 1
   WPradius: 0.02
+  isUnderBananaDominance: 0
 --- !u!64 &1595922416
 MeshCollider:
   m_ObjectHideFlags: 0
