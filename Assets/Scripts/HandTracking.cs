@@ -9,7 +9,7 @@ public class HandTracking : MonoBehaviour
     GameObject thumbObject, middleObject, ringObject, pinkyObject;
     MixedRealityPose pose;
 
-    [SerializeField] private float projectileSpeed = 0.6f;
+    [SerializeField] private float projectileSpeed = 5f;
     [SerializeField] private GameObject projectilePrefab;
 
     // Threshold for detecting pinch and gun gestures
@@ -139,19 +139,37 @@ public class HandTracking : MonoBehaviour
         return true;
     }
 
+    Vector3 CalculateIndexDirection()
+    {
+        MixedRealityPose indexTipPose;
+        MixedRealityPose indexBasePose;
+
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Right, out indexTipPose) &&
+            HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexKnuckle, Handedness.Right, out indexBasePose))
+        {
+            return (indexTipPose.Position - indexBasePose.Position).normalized;
+        }
+
+        return Vector3.forward; // Default direction if the pose is not found
+    }
+
+
     void ShootProjectile()
     {
-        if (hasShot) return; // Prevents shooting multiple projectiles
+        if (hasShot) return; // Prevents multiple projectiles from being fired
 
-        // Instantiate the projectile at the index finger's position
-        GameObject projectile = Instantiate(projectilePrefab, indexObject.transform.position, Quaternion.Euler(-90, 0, 0));
+        // Calculate the direction of the index finger
+        Vector3 indexDirection = CalculateIndexDirection();
+
+        // Instantiate the projectile at the position of the index finger
+        GameObject projectile = Instantiate(projectilePrefab, indexObject.transform.position, Quaternion.LookRotation(indexDirection));
         projectile.AddComponent<Projectile>();
+
         if (projectile == null)
         {
             Debug.LogError("Projectile is not a valid object");
             return;
         }
-
 
         // Ensure the projectile has a Rigidbody component
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
@@ -160,17 +178,21 @@ public class HandTracking : MonoBehaviour
             rb = projectile.AddComponent<Rigidbody>();
         }
 
+        // Configure the projectile's Collider
         SphereCollider sc = projectile.GetComponent<SphereCollider>();
+        if (sc == null)
+        {
+            sc = projectile.AddComponent<SphereCollider>();
+        }
         sc.isTrigger = true;
 
-        // Set initial Rigidbody properties
-        rb.useGravity = false; 
-        rb.isKinematic = false; // Allows the projectile to be affected by physics
+        // Set initial properties of Rigidbody
+        rb.useGravity = false;
+        rb.isKinematic = false; // Allows the projectile to be influenced by physics
+        rb.velocity = indexDirection * projectileSpeed; // Apply the direction and speed to the projectile
 
-        // Mark that a projectile has been shot
+        // Mark that a projectile has been fired
         hasShot = true;
     }
-
-
 
 }

@@ -8,7 +8,6 @@ public class Projectile : MonoBehaviour
     private Rigidbody rb; // Cache the Rigidbody component
     [SerializeField] PowerUpEffect nerfEffect;
     [SerializeField] PowerUpEffect nerfEffectRemoval;
-    private bool bananaApplied = false;
 
     private void Start()
     {
@@ -27,6 +26,7 @@ public class Projectile : MonoBehaviour
         rb.useGravity = false; // Disable the default gravity
         rb.isKinematic = false; // Ensure the object is not kinematic
     }
+
 
     private void FixedUpdate()
     {
@@ -57,10 +57,10 @@ public class Projectile : MonoBehaviour
                 transform.localPosition = new Vector3(transform.localPosition.x, 0.7f, transform.localPosition.z);
             }
         }
-        if (other.gameObject.CompareTag("car1") || other.gameObject.CompareTag("car2") || other.gameObject.CompareTag("car3"))
+        if ((other.gameObject.CompareTag("car1") || other.gameObject.CompareTag("car2") || other.gameObject.CompareTag("car3")) && other.GetComponent<Waypoints>().isUnderBananaDominance == false)
         {
             nerfEffect.Apply(other.gameObject);
-            bananaApplied = true;
+            other.GetComponent<Waypoints>().isUnderBananaDominance = true;
             transform.GetComponent<MeshRenderer>().enabled = false;
             NerfRemoval(other.gameObject);
         }
@@ -69,9 +69,9 @@ public class Projectile : MonoBehaviour
     IEnumerator NerfRemoval(GameObject collidedObject)
     {
         Debug.Log(collidedObject.name);
-        // Wait for 1 seconds before applying the effect
+        // Wait for 2 seconds before applying the effect
         float timer = 0;
-        while (timer < 1f)
+        while (timer < 2f)
         {
             // Check if the collided object still exists
             if (collidedObject != null)
@@ -83,7 +83,7 @@ public class Projectile : MonoBehaviour
             yield return null;
         }
 
-        bananaApplied = false;
+        collidedObject.GetComponent<Waypoints>().isUnderBananaDominance = false;
 
     }
 
