@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // Set the initial game state
-        CurrentState = GameState.Running;
+        CurrentState = GameState.Paused;
     }
 
     void Update()
