@@ -9,7 +9,7 @@ public class LoadCharacter : MonoBehaviour
 	public Transform spawnPoint;
 	public TMP_Text label;
 
-	void Start()
+	void StartGame()
 	{
 		int selectedCharacter = PlayerPrefs.GetInt("selectedCharacter");
 		GameObject prefab = characterPrefabs[selectedCharacter];
